@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signal from the Stars</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #282c34;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #61dafb;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #21a1f1;
+        }
+        #animation {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #61dafb;
+            margin-bottom: 20px;
+            background-image: url('space_background.jpg'); /* Background of the universe */
+            background-size: cover;
+        }
+        #signal {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 20px;
+            background-color: #61dafb;
+            animation: signal-animation 3s forwards;
+        }
+        @keyframes signal-animation {
+            0% { bottom: 0; }
+            100% { bottom: 100%; }
+        }
+        #device-panel {
+            border: 2px solid #61dafb;
+            padding: 10px;
+            margin: 20px 0;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        #extraterrestrial-image {
+            display: none;
+            width: 200px;
+            margin: 20px auto;
+            border: 2px solid #61dafb;
+            border-radius: 10px;
+        }
+        .alien-animation {
+            display: none;
+            animation: alien-appear 2s forwards;
+        }
+        @keyframes alien-appear {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        #universe-window {
+            width: 100%;
+            height: 300px;
+            background-image: url('universe_window.jpg'); /* Window showing the universe */
+            background-size: cover;
+            border: 2px solid #61dafb;
+            margin: 20px 0;
+            position: relative;
+        }
+        #arrival-message {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Signal from the Stars</h1>
+    <div id="animation"></div>
+    <div id="universe-window">
+        <div id="arrival-message" style="display: none;">Extraterrestrial Life Detected!</div>
+    </div>
+    <div id="device-panel">
+        <h3>Device Panel</h3>
+        <p>Status: Waiting for signal...</p>
+        <p>Signal Strength: <span id="signal-strength">0%</span></p>
+        <p>Observing Region: Near Earth</p>
+        <p>Last Observation: <span id="last-observation">N/A</span></p>
+    </div>
+    <div id="game"></div>
+    <img id="extraterrestrial-image" src="" alt="Extraterrestrial Life" />
+
+    <script>
+        const gameContainer = document.getElementById("game");
+        const animationContainer = document.getElementById("animation");
+        const signalStrength = document.getElementById("signal-strength");
+        const lastObservation = document.getElementById("last-observation");
+        const extraterrestrialImage = document.getElementById("extraterrestrial-image");
+        const arrivalMessage = document.getElementById("arrival-message");
+
+        function startGame() {
+            animationContainer.innerHTML = "<div id='signal'></div>";
+            setTimeout(() => {
+                gameContainer.innerHTML = "<h2>A signal from an extraterrestrial civilization has been detected!</h2>";
+                updateSignalStrength(100); // Set signal strength to 100% on detection
+                lastObservation.innerText = "Signal Received";
+                presentChoice("Do you want to respond to the signal?", [
+                    { text: "Yes, let's respond!", action: respondYes },
+                    { text: "No, it's too risky.", action: respondNo }
+                ]);
+            }, 3000); // Wait for animation to finish before displaying choices
+        }
+
+        function updateSignalStrength(strength) {
+            signalStrength.innerText = `${strength}%`;
+        }
+
+        function presentChoice(question, choices) {
+            const questionElement = document.createElement("h3");
+            questionElement.innerText = question;
+            gameContainer.appendChild(questionElement);
+
+            choices.forEach(choice => {
+                const button = document.createElement("button");
+                button.innerText = choice.text;
+                button.onclick = choice.action;
+                gameContainer.appendChild(button);
+            });
+        }
+
+        function respondYes() {
+            gameContainer.innerHTML = "<h2>You chose to respond!</h2>";
+            presentChoice("What message will you send?", [
+                { text: "Invite them to visit Earth.", action: inviteVisit },
+                { text: "Ask about their technology.", action: askTechnology }
+            ]);
+        }
+
+        function respondNo() {
+            gameContainer.innerHTML = "<h2>You chose not to respond.</h2>";
+            presentChoice("Do you want to monitor the signal?", [
+                { text: "Yes, we should keep an eye on it.", action: monitorSignal },
+                { text: "No, let's ignore it.", action: ignoreSignal }
+            ]);
+        }
+
+        function inviteVisit() {
+            gameContainer.innerHTML = "<h2>Your invitation was received!</h2>";
+            showExtraterrestrialImage("alien_invite.jpg"); // Placeholder for the image
+            presentChoice("How do you prepare for their arrival?", [
+                { text: "Hold a global conference.", action: globalConference },
+                { text: "Develop a welcoming message.", action: welcomingMessage }
+            ]);
+            showArrivalMessage();
+        }
+
+        function askTechnology() {
+            gameContainer.innerHTML = "<h2>Your inquiry about their technology was received!</h2>";
+            showExtraterrestrialImage("alien_technology.jpg"); // Placeholder for the image
+            presentChoice("They respond with incredible knowledge. What do you want to learn more about?", [
+                { text: "Energy solutions.", action: learnEnergy },
+                { text: "Space travel advancements.", action: learnSpaceTravel }
+            ]);
+            showArrivalMessage();
+        }
+
+        function monitorSignal() {
+            gameContainer.innerHTML = "<h2>You chose to monitor the signal.</h2>";
+            presentChoice("Do you want to respond now?", [
+                { text: "Yes, let's respond!", action: respondYes },
+                { text: "No, let's stay cautious.", action: stayCautious }
+            ]);
+        }
+
+        function ignoreSignal() {
+            gameContainer.innerHTML = "<h2>You chose to ignore the signal.</h2>";
+            presentChoice("Months later, other nations have responded. Do you regret your decision?", [
+                { text: "Yes, we missed an opportunity.", action: regretDecision },
+                { text: "No, it was safer this way.", action: safeDecision }
+            ]);
+        }
+
+        function stayCautious() {
+            gameContainer.innerHTML = "<h2>You chose to stay cautious.</h2>";
+            gameContainer.innerHTML += "<p>You discover they are peaceful!</p>";
+            showExtraterrestrialImage("alien_peaceful.jpg"); // Placeholder for the image
+            gameContainer.innerHTML += "<p>How do you want to approach them now?</p>";
+            presentChoice("Choose your approach:", [
+                { text: "Send a message of peace.", action: sendPeaceMessage },
+                { text: "Request a meeting.", action: requestMeeting }
+            ]);
+        }
+
+        function globalConference() {
+            gameContainer.innerHTML = "<h2>Preparing for the alien visit!</h2>";
+            gameContainer.innerHTML += "<p>A global conference was held to discuss the best approach. Everyone is excited!</p>";
+            showEnding("You welcomed the aliens with open arms, fostering a new era of interstellar diplomacy.");
+        }
+
+        function welcomingMessage() {
+            gameContainer.innerHTML = "<h2>Crafting a welcoming message!</h2>";
+            gameContainer.innerHTML += "<p>Your message emphasizes peace and collaboration.</p>";
+            showEnding("The aliens arrive, impressed by Earth's unity and kindness.");
+        }
+
+        function learnEnergy() {
+            gameContainer.innerHTML = "<h2>Exploring energy solutions!</h2>";
+            gameContainer.innerHTML += "<p>The aliens offer revolutionary energy technology.</p>";
+            showEnding("Humanity's energy crisis is solved, leading to a green revolution.");
+        }
+
+        function learnSpaceTravel() {
+            gameContainer.innerHTML = "<h2>Learning about space travel!</h2>";
+            gameContainer.innerHTML += "<p>The aliens share advanced propulsion systems.</p>";
+            showEnding("Humanity embarks on a new era of space exploration.");
+        }
+
+        function sendPeaceMessage() {
+            gameContainer.innerHTML = "<h2>Sending a message of peace!</h2>";
+            gameContainer.innerHTML += "<p>Your message emphasizes harmony and cooperation.</p>";
+            showEnding("The aliens respond positively, starting a friendship that spans galaxies.");
+        }
+
+        function requestMeeting() {
+            gameContainer.innerHTML = "<h2>Requesting a meeting!</h2>";
+            gameContainer.innerHTML += "<p>Your cautious approach leads to a successful dialogue.</p>";
+            showEnding("The meeting opens doors to collaboration and learning between species.");
+        }
+
+        function showArrivalMessage() {
+            arrivalMessage.style.display = "block";
+            setTimeout(() => {
+                arrivalMessage.style.display = "none";
+            }, 3000);
+        }
+
+        function showExtraterrestrialImage(image) {
+            extraterrestrialImage.src = image;
+            extraterrestrialImage.style.display = "block";
+            extraterrestrialImage.classList.add("alien-animation");
+            setTimeout(() => {
+                extraterrestrialImage.classList.remove("alien-animation");
+            }, 2000);
+        }
+
+        function showEnding(endingMessage) {
+            gameContainer.innerHTML += "<h2>Ending:</h2>";
+            gameContainer.innerHTML += `<p>${endingMessage}</p>`;
+            gameContainer.innerHTML += "<p>Thank you for playing!</p>";
+        }
+
+        // Start the game when the page loads
+        startGame();
+    </script>
+</body>
+</html>
+
